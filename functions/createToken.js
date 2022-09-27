@@ -20,11 +20,17 @@ exports.handler = function(context, event, callback) {
   token.identity = event.identity;
   
   const VideoGrant = AccessToken.VideoGrant;
+  const SyncGrant = AccessToken.SyncGrant;
 
   // Grant the access token Twilio Video capabilities.
   const grant = new VideoGrant();
   token.addGrant(grant);
-  
+
+  var syncGrant = new SyncGrant({
+    serviceSid: 'ISd665c3df5c4f76f3e2031d3de98ca790',
+});
+  token.addGrant(syncGrant);
+
   // Serialize the token to a JWT string.
   response.appendHeader("Access-Control-Allow-Origin","*");
   response.setBody(token.toJwt());

@@ -1,36 +1,97 @@
 
+let token = "";
+let syncStream;
 $(document).ready(function(){
+    $("#enterSession").click(function(){
+      let userName = $("#userName").val();
+      let roomName = $("#roomName").val();
+
+      if(!userName){
+          alert("Please enter a user name!");
+          return;
+      }
+
+      if(!roomName){
+          alert("Please enter a room name!");
+          return;
+      }
+
+      $("#enterMeeting").show();
+      initializeSyncClient(userName, roomName)
+              .then(sc => syncStream = sc)
+              .catch(err => console.error(err));
+   
+    })
+
     $("#enterMeeting").click(function(){
+       
         let userName = $("#userName").val();
         let roomName = $("#roomName").val();
 
-        if(!userName){
-            alert("Please enter a user name!");
-            return;
-        }
-
-        if(!roomName){
-            alert("Please enter a room name!");
-            return;
-        }
 
         $("#welcomePanel").hide();
         $("#controlPanel").show();
 
-        connectVideoRoom(userName, roomName)
-            .then(token =>{
-                (token);
-            })
-            .catch(err =>{
-                console.error(err);
-                alert(err)
-            });
+        if(userName =='master'){
+          connectVideoRoom(userName, roomName)
+          .then(token =>{
+              (token);
+              setTimeout(()=>{
+                syncStream.publishMessage({start:'true'}).then((message) => {
+                  console.log('Stream publishMessage() successful, message SID:', message.sid);
+                })
+                .catch((error) => {
+                  console.error('Stream publishMessage() failed', error);
+                });
+
+              }, 10000)
+              
+          })
+          .catch(err =>{
+              console.error(err);
+              alert(err)
+          });
+        }
+
+        
         
     });
 });
 
 
+async function initializeSyncClient(identity,roomName){
+  token = await getToken(identity);
 
+  var syncClient = new Twilio.Sync.Client(token);
+
+  syncClient.on('connectionStateChanged', (newState)=>{
+    if(newState=="connected"){
+
+      syncClient.stream(roomName)
+              .then((stream) => {
+                stream.on('messagePublished', (event) => {
+                  console.log('Received a "messagePublished" event:', event);
+                  if(identity !== 'master' && event.message.data.start =='true'){
+
+                    connectVideoRoom(identity, roomName)
+                        .then(token =>{
+                          (token);
+                      })
+                      .catch(err =>{
+                          console.error(err);
+                          alert(err)
+                      });
+                  }
+                });
+                syncStream = stream;
+                return stream;
+              })
+              .catch(err => console.error(err))
+      
+    }
+      
+  });
+}
 
 
 async function getToken(identity) {
@@ -48,7 +109,7 @@ async function getToken(identity) {
 async function connectVideoRoom(name, room){
     try{
 
-        let token = await getToken(name);
+        
 
         //let trackCanvas = await fetchLocalTrackCanvas();
         let localTracks = await Twilio.Video.createLocalTracks();
@@ -88,6 +149,8 @@ async function connectVideoRoom(name, room){
         $("#sendMessageRoom").click(function(){
             sendMessage(JSON.stringify({"time": "Hello " + new Date()}));
         });
+
+        return connectionToRoom;
         
     }
     catch(err){
