@@ -62,7 +62,8 @@ async function connectVideoRoom(name, room){
                 height: { min: 480, ideal: 720, max: 1080 }});
 
         videoTrack.attach( document.getElementById('localVideo'));
-
+        
+        $("#buttonBackground").show();
 
 
         //let publication = await connectionToRoom.localParticipant.publishTrack(trackCanvas);

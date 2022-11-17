@@ -1,42 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="./style.css" />
-    <title>Hello Twilio Serverless!</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://sdk.twilio.com/js/video/releases/2.21.1/twilio-video.min.js"></script>
-    <script src="index.js"></script>
-  </head>
-  <body>
 
-    <div id="welcomePanel">
-      <h2 style="text-align: center;"><strong>Video App Test</strong></h2>
-      <p style="text-align: center;">Username:<input id="userName" type="text" /></p>
-      <p style="text-align: center;">Room:<input id="roomName" type="text" /></p>
-      <p style="text-align: center;"><button id="enterMeeting">Enter Meeting</button></p>
-    </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="./style.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
-    <hr />
-    <div id="controlPanel" hidden>
-      <div class="row">
-        <div class="column" style="text-align: center;">
-          <video id="localVideo" width="640" height="420"></video>
-        </div>
-        <div class="column" id="remoteVideo">
-         
-        </div>
-      </div>
-      <div class="row">
-        <div class="column" >
-          <h5>Local Participant</h5>
-        </div>
-        <div class="column">
-          <h5>Remote Participant</h5>
-        </div>
+  <title>Hello Twilio Serverless!</title>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://sdk.twilio.com/js/video/releases/2.21.1/twilio-video.min.js"></script>
+  <script src="index.js"></script>
+</head>
+
+<body>
+
+  <div id="welcomePanel" class="container">
+    <div class="row ">
+      <div class="col">
+        <h2 style="text-align: center;"><strong>Video App Test</strong></h2>
       </div>
     </div>
-  </body>
+    <div class="row justify-content-md-center">
+      <div class="col-sm-auto">
+        <p style="text-align: center;">
+
+          <input id="userName" type="text" class="form-control" placeholder="Username" aria-label="Username">
+
+        </p>
+      </div>
+    </div>
+    <div class="row justify-content-md-center">
+      <div class="col-sm-auto">
+        <p style="text-align: center;">
+
+          <input id="roomName" type="text" class="form-control" placeholder="Room name" aria-label="RoomName">
+        </p>
+      </div>
+    </div>
+    <p style="text-align: center;"><button id="enterMeeting" class="btn btn-primary">Enter Meeting</button></p>
+  </div>
+
+  <hr />
+  <div id="controlPanel" class="container text-center" style="display: none;">
+    <div class="row">
+      <div class="col" style="text-align: center;">
+        <video id="localVideo" width="640" height="420"></video>
+
+        <div id="buttonBackground" style="display: none;">
+          <button id="enableBackground" class="btn btn-info">Enable Background</button>
+        </div>
+      </div>
+      <div class="col" id="remoteVideo">
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+
+        <h5>Local Participant</h5>
+      </div>
+      <div class="col">
+        <h5>Remote Participant</h5>
+      </div>
+    </div>
+  </div>
+</body>
+
 </html>

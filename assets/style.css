@@ -77,10 +77,3 @@ footer p {
   width: 50%;
   text-align: center;
 }
-
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
