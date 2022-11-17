@@ -15,6 +15,8 @@
     crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://sdk.twilio.com/js/video/releases/2.21.1/twilio-video.min.js"></script>
+  <script src="./background/twilio-video-processors.min.js"></script>
+
   <script src="index.js"></script>
 </head>
 
@@ -50,7 +52,7 @@
   <div id="controlPanel" class="container text-center" style="display: none;">
     <div class="row">
       <div class="col" style="text-align: center;">
-        <video id="localVideo" width="640" height="420"></video>
+        <video id="localVideo" width="580" height="420"></video>
 
         <div id="buttonBackground" style="display: none;">
           <button id="enableBackground" class="btn btn-info">Enable Background</button>
@@ -66,7 +68,7 @@
         <h5>Local Participant</h5>
       </div>
       <div class="col">
-        <h5>Remote Participant</h5>
+        <h5 id="remoteParticipantName">Remote Participant</h5>
       </div>
     </div>
   </div>

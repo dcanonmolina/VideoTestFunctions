@@ -1,5 +1,9 @@
+const VideoProcessors = Twilio.VideoProcessors;
+let videoTrack = null; 
 
 $(document).ready(function(){
+    let isBackgroundOn = false;
+    let addBackground;
     $("#enterMeeting").click(function(){
         let userName = $("#userName").val();
         let roomName = $("#roomName").val();
@@ -27,6 +31,42 @@ $(document).ready(function(){
             });
         
     });
+
+    $("#buttonBackground").click(function(){
+
+      if(!videoTrack) return;
+
+      if(!isBackgroundOn){
+        const img = new Image();
+
+        img.onload = () =>  {
+          addBackground = new VideoProcessors.VirtualBackgroundProcessor({
+            assetsPath: './background',
+            backgroundImage: img,
+          });
+        
+          addBackground.loadModel().then(() => {
+            videoTrack.addProcessor(addBackground);
+            isBackgroundOn = !isBackgroundOn;
+          });
+        };
+        img.src = './background/180132.jpg';
+         
+        $("#buttonBackground").html('Disable Background');
+        $(this).removeClass('btn-info');
+        $(this).addClass('btn btn-warning');
+      }else
+      {
+        videoTrack.removeProcessor(addBackground);
+        isBackgroundOn = !isBackgroundOn;
+
+        $("#buttonBackground").html('Enable Background');
+        
+        $("#buttonBackground").removeClass('btn-warning');
+        $("#buttonBackground").addClass('btn-info');
+      }
+
+    });
 });
 
 
@@ -51,16 +91,17 @@ async function connectVideoRoom(name, room){
         let token = await getToken(name);
 
         //let trackCanvas = await fetchLocalTrackCanvas();
-        let localTracks = await Twilio.Video.createLocalTracks();
-        connectionToRoom = await Twilio.Video.connect(token,{
-            name: room,
-            tracks: localTracks
-        });
-
-        let videoTrack = await Twilio.Video.createLocalVideoTrack({name: 'myCam',
+        //let localTracks = await Twilio.Video.createLocalTracks();
+       
+        let audioTrack = await Twilio.Video.createLocalAudioTrack();
+        videoTrack = await Twilio.Video.createLocalVideoTrack({name: 'myCam',
                 width: { min: 640, ideal: 1280, max: 1920 },
                 height: { min: 480, ideal: 720, max: 1080 }});
 
+          connectionToRoom = await Twilio.Video.connect(token,{
+            name: room,
+            tracks: [audioTrack, videoTrack]
+        });
         videoTrack.attach( document.getElementById('localVideo'));
         
         $("#buttonBackground").show();
@@ -112,6 +153,9 @@ function participantConnected(participant) {
     videoRemoteParticipant.setAttribute("width", "640");
     videoRemoteParticipant.setAttribute("height", "480");
     newParticipantElement.appendChild(videoRemoteParticipant);
+
+    let h5title = document.getElementById('remoteParticipantName');
+    h5title.innerHTML=participant.identity;
     
 
     participant.tracks.forEach(publication => trackPublished(participant, publication));
