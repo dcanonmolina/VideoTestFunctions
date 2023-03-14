@@ -67,6 +67,10 @@ $(document).ready(function(){
       }
 
     });
+
+    $("#showStats").click(function(){
+      window.Twilio.VideoRoomMonitor.toggleMonitor();
+    })
 });
 
 
@@ -102,6 +106,7 @@ async function connectVideoRoom(name, room){
             name: room,
             tracks: [audioTrack, videoTrack]
         });
+        window.Twilio.VideoRoomMonitor.registerVideoRoom(connectionToRoom);
         videoTrack.attach( document.getElementById('localVideo'));
         
         $("#buttonBackground").show();

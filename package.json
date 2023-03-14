@@ -10,6 +10,7 @@
   "dependencies": {
     "@dgcode/url-fetch-app": "^0.1.55",
     "@twilio/runtime-handler": "1.2.3",
+    "@twilio/video-room-monitor": "^1.0.1",
     "axios": "^1.2.4",
     "twilio": "^3.84.1"
   },
