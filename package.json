@@ -8,8 +8,10 @@
     "deploy": "twilio-run deploy"
   },
   "dependencies": {
-    "twilio": "^3.56",
-    "@twilio/runtime-handler": "1.2.3"
+    "@dgcode/url-fetch-app": "^0.1.55",
+    "@twilio/runtime-handler": "1.2.3",
+    "axios": "^1.2.4",
+    "twilio": "^3.84.1"
   },
   "devDependencies": {
     "twilio-run": "^3.4.2"
